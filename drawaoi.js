@@ -47,6 +47,7 @@ var Paper = can.Control(
 
             // Set position and size
             this.drawingRect.css(position);
+            
         },
         endDrawRect: function(e) {
             var currentX = e.pageX - this.canvasOffsetLeft;
@@ -55,15 +56,30 @@ var Paper = can.Control(
             // Calculate the position and size of the rectangle we are drawing
             var position = this.calculateRectPos(this.drawStartX, this.drawStartY, currentX, currentY);
 
-            if (position.width < this.options.rect.minWidth || position.height < this.options.rect.minHeight) {
+            if (position.width < this.options.rect.minWidth || 
+                position.height < this.options.rect.minHeight || 
+                (currentX-this.drawStartX) < 0 || 
+                (currentY-this.drawStartY) < 0) 
+            {
 
                 // The drawn rectangle is too small, remove it
                 this.drawingRect.remove();
             }
             else {
-
+                
                 // Set position and size
                 this.drawingRect.css(position);
+
+                //table
+                tableRows = tableRows + 
+                    '<tr>' + 
+                        '<td>' + Math.round(this.drawStartX) + '</td>' +  
+                        '<td>' + Math.round(this.drawStartY) + '</td>' +  
+                        '<td>' + (currentX-this.drawStartX) + '</td>' + 
+                        '<td>' + (currentY-this.drawStartY) + '</td>' + 
+                    '</tr>'; 
+
+                $('#table').html('<table>' + tableRows + '</table>');
             }
 
             // Unbind event handlers
@@ -71,17 +87,6 @@ var Paper = can.Control(
             this.element.off('mouseup.paper');
 
             //alert(this.drawStartX + ',' +  this.drawStartY + ',' + (currentX-this.drawStartX) + ',' +  (currentY-this.drawStartY));
-
-            //table
-            tableRows = tableRows + 
-                '<tr>' + 
-                    '<td>' + Math.round(this.drawStartX) + '</td>' +  
-                    '<td>' + Math.round(this.drawStartY) + '</td>' +  
-                    '<td>' + (currentX-this.drawStartX) + '</td>' + 
-                    '<td>' + (currentY-this.drawStartY) + '</td>' + 
-                '</tr>'; 
-
-            $('#table').html('<table>' + tableRows + '</table>');
         },
         calculateRectPos: function(startX, startY, endX, endY) {
 

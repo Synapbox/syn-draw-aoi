@@ -115,9 +115,3 @@ var Paper = can.Control(
 $(function() {
     var paper = new Paper('#canvas', {});
 });
-
-$(document).mousemove(function(e){
-    e.pageY = e.pageY - 8;
-    e.pageX = e.pageX - 8;
-    $('#coordinates').html('x: ' + e.pageX + ' y : ' + e.pageY);
-});
